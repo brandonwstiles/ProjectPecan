@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 8397678381207762811}
   - component: {fileID: -6475615191288405303}
   - component: {fileID: 7811573221695865372}
-  - component: {fileID: 3385662726639306056}
-  m_Layer: 3
+  - component: {fileID: 7043026371616409233}
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -90,7 +90,7 @@ Rigidbody2D:
   m_GameObject: {fileID: 129926877389996026}
   m_BodyType: 1
   m_Simulated: 1
-  m_UseFullKinematicContacts: 0
+  m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
@@ -99,15 +99,15 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
---- !u!114 &3385662726639306056
+--- !u!114 &7043026371616409233
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -116,10 +116,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 129926877389996026}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a26edc32f592be49a03e1d09d540371, type: 3}
+  m_Script: {fileID: 11500000, guid: ddb3e360b6b8af748a24a75618af8127, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  speed: 5
+  jumpVelocity: 10
+  jumpTime: 4
+  isGrounded: 0
+  isJumping: 0
 --- !u!1 &5518439871113250676
 GameObject:
   m_ObjectHideFlags: 0
@@ -130,7 +134,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7331190799165935702}
   - component: {fileID: 7199528395120738944}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Eye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -190,9 +194,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -323464585
-  m_SortingLayer: 4
-  m_SortingOrder: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_FlipX: 0
@@ -214,7 +218,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6410315934347298411}
   - component: {fileID: 4711209304020525611}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -276,7 +280,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1941286779
-  m_SortingLayer: 3
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.5039605, g: 0.7075472, b: 0.6967181, a: 1}

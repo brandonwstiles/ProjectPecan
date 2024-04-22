@@ -1,52 +1,78 @@
 using UnityEngine;
 
+//script that works like Celeste's player movement
 public class PlayerMovement : MonoBehaviour
 {
-    public float moveSpeed = 5f;
+    public float speed = 5f;
     public float jumpForce = 10f;
-    public float gravity = 20f;
+    public float fallMultiplier = 2.5f;
+    public float lowJumpMultiplier = 2f;
+    public LayerMask groundLayer;
+    public Transform groundCheck;
+    public float groundCheckRadius = 0.2f;
 
+    private Rigidbody2D rb;
     private bool isGrounded;
-    private Vector2 targetPosition;
+    private bool isJumping;
+    private float jumpTimeCounter;
+    public float jumpTime;
+    private bool isFalling;
+
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
 
     private void Update()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
-        // Calculate movement direction
-        Vector2 movement = new Vector2(horizontalInput * moveSpeed * Time.deltaTime, 0f);
-
-        // Apply gravity
-        if (!isGrounded)
+        if (isGrounded)
         {
-            movement.y -= gravity * Time.deltaTime;
+            isJumping = false;
+            isFalling = false;
         }
 
-        // Apply movement
-        targetPosition += movement;
-        transform.position = Vector2.Lerp(transform.position, targetPosition, Time.deltaTime * 10f);
-
-        // Check for jump
-        if (isGrounded && Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetButtonDown("Jump") && isGrounded)
         {
-            Jump();
+            isJumping = true;
+            jumpTimeCounter = jumpTime;
+            rb.velocity = Vector2.up * jumpForce;
+        }
+
+        if (Input.GetButton("Jump") && isJumping)
+        {
+            if (jumpTimeCounter > 0)
+            {
+                rb.velocity = Vector2.up * jumpForce;
+                jumpTimeCounter -= Time.deltaTime;
+            }
+            else
+            {
+                isJumping = false;
+            }
+        }
+
+        if (Input.GetButtonUp("Jump"))
+        {
+            isJumping = false;
+        }
+
+        if (rb.velocity.y < 0)
+        {
+            isFalling = true;
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+        }
+        else if (rb.velocity.y > 0 && !Input.GetButton("Jump"))
+        {
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
         }
     }
 
-    private void Jump()
+    private void FixedUpdate()
     {
-        // Apply jump force
-        Vector2 jumpVelocity = new Vector2(0f, jumpForce);
-        targetPosition += jumpVelocity;
-        isGrounded = false;
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        // Check if the character is grounded
-        if (collision.contacts[0].normal.y > 0.5f)
-        {
-            isGrounded = true;
-        }
+        float move = Input.GetAxis("Horizontal");
+        rb.velocity = new Vector2(move * speed, rb.velocity.y);
     }
 }
+ 
