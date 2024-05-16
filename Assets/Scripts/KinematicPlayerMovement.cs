@@ -12,7 +12,7 @@ public class KinematicPlayerMovement : MonoBehaviour
 
     public float speed = 5f;
     public float jumpVelocity = 10f;
-    public float jumpTime = 4f;
+    public float jumpForce = 4f;
 
     private float gravity;
     [SerializeField] private bool isGrounded;
@@ -21,14 +21,14 @@ public class KinematicPlayerMovement : MonoBehaviour
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
-        gravity = -2 * jumpVelocity / Mathf.Pow(jumpTime, 2);
+        gravity = -2 * jumpVelocity / Mathf.Pow(jumpForce, 2);
     }
 
     void Update()
     {
         GroundCheck();
 
-        Move(Input.GetAxis("Horizontal"));
+        Move(new Vector2(Input.GetAxis("Horizontal"), 0f));
 
         FallingCheck();
 
@@ -55,17 +55,25 @@ public class KinematicPlayerMovement : MonoBehaviour
     }
     void ApplyGravity()
     {
-        rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + gravity * Time.deltaTime);
+
+        //
+        //rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + gravity * Time.deltaTime);
     }
     
     void RemoveGravity() 
-    {        
-        rb.velocity = new Vector2(rb.velocity.x, 0);
+    {
+        rb.MovePosition(new Vector2(rb.position.x, 0));
+        //rb.velocity = new Vector2(rb.velocity.x, 0);
     }
 
-    void Move(float direction)
+    void Move(Vector2 direction)
     {
-        rb.velocity = new Vector2(direction * speed, rb.velocity.y);
+        Vector2 newPosition = rb.position + direction * speed * Time.fixedDeltaTime;
+        newPosition += Physics2D.gravity * rb.gravityScale * Time.fixedDeltaTime;
+
+        // Move the rigidbody to the new position
+        rb.MovePosition(newPosition);
+        //rb.velocity = new Vector2(direction * speed, rb.velocity.y);
     }
 
     void Jump()
@@ -73,9 +81,16 @@ public class KinematicPlayerMovement : MonoBehaviour
         //rb.velocity = new Vector2(rb.velocity.x, 0);
         if (isGrounded)
         {
+            Vector3 newPosition = transform.position + Vector3.up * jumpForce;
+
+            // Move the rigidbody to the new position
+            rb.MovePosition(newPosition);
+
+            // Set grounded flag to false
             isGrounded = false;
-            rb.velocity = new Vector2(rb.velocity.x, jumpVelocity);
-            isJumping = true;
+            //isGrounded = false;
+            //rb.velocity = new Vector2(rb.velocity.x, jumpVelocity);
+            //isJumping = true;
         }
     }
 
@@ -83,6 +98,7 @@ public class KinematicPlayerMovement : MonoBehaviour
     {
         if (isGrounded)
         {
+
             RemoveGravity();
         }
         else

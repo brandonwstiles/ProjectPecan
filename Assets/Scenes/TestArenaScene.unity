@@ -844,6 +844,10 @@ PrefabInstance:
       propertyPath: groundLayer.m_Bits
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 7043026371616409233, guid: 5816c11c72a00ee4ea000d2ecb6e3619, type: 3}
+      propertyPath: jumpTime
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7199528395120738944, guid: 5816c11c72a00ee4ea000d2ecb6e3619, type: 3}
       propertyPath: m_SortingOrder
       value: 2
